@@ -1606,6 +1606,15 @@ class UI(Viewer):
                         return
                 self._update_main_view()
 
+                if hasattr(self, "_coordinator") and self.context.get("sources"):
+                    await self._sync_sources(global_context=self.context)
+
+                if not analysis:
+                    with edit_readonly(self._chat_input):
+                        self._chat_input.value_input = contents
+                    self._on_submit()
+                    return
+
                 if not analysis:
                     # Set the input value and trigger submit
                     # This will handle pending uploads via on_submit
